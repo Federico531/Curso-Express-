@@ -1,27 +1,24 @@
 const express = require ('express'); 
 const app = express();  
 const morgan = require('morgan');
+
+//express settings
+app.set('appName', 'Curso express 2' ) // variable appName - nombre 'curso express 2' --> lo llamamos desde app.listen
+app.set('port', 5000);
+app.set('view engine', 'ejs');
+// Middlewares
 app.use(express.json()); //le dice a express que entienda formato JSON cuando una app/cliente se lo envie
+app.use(morgan('dev')); //dev es solo uno hay varios mas
 
-/* function logger(req, res, next){ 
-        console.log()
-        console.log(`Route received ${req.protocol}://${req.get('host')}${req.originalUrl}`); 
-                                    //req.protocol = http --> :// --> req.get('host') --> localhost:3001   req.originalUrl --> ruta del usuario
-        next();        
-    }
-
-app.use(logger); /*
-
-//todas las rutas '/user' van a tener que pasar primero por app.all 
-//cuando paso por la ruta user, esto me avisa por consola y envia una respuesta de vuelta al navegador
-
+//ROUTES
 /* app.all('/user', (req,res, next)=>{ 
     console.log("por aqui paso");
     next();
 }); */
-
-
-app.use(morgan('dev'));
+app.get('/',(req,res)=>{
+    const data = [{name: "Jose"},{name: "Fede"},{name: "Rubio"}] //datos que recibo de una BASE DE DATOS
+    res.render('index.ejs', {people: data}); //people sera una variable que tendra esos datos, que llamaremos desde index.ejs
+})
 app.get('/user',(req, res)=>{
     res.json({
         userName : "Federico_531",
@@ -39,14 +36,9 @@ app.post('/user/:id',(req,res)=>{
     res.send('TA ANDANDO EL POST')   ;
 });
 
-
-
-
-    
 app.put('/user/:usuario',(req,res)=>{
     console.log(req.body);
     res.send(`USUARIO ${req.params.usuario} ACTUALIZADO`);
-
 });
 
 app.delete('/user/:usuario',(req,res)=>{
@@ -59,7 +51,9 @@ app.use(express.static('public')); //el nombre de la carpeta que creamos dentro 
 
 
 
-app.listen(3001, ()=>{
-    console.log("Servidor en puerto 3001")
+app.listen(app.get('port'), ()=>{
+    console.log(app.get('appName')) 
+    console.log("Servidor en puerto", app.get('port') ) 
+    //con esto evito tener que venir a cambiar mi puerto si es una app grande
 })
  
