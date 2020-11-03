@@ -1,4 +1,4 @@
 
 setTimeout(() =>{
-    document.getElementById('culo').innerHTML = "vosabe";
+    document.getElementById('hola').innerHTML = "vosabe";
 },3000) //ejecuta luego de 3 segundos 
